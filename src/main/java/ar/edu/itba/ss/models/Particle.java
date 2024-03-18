@@ -14,9 +14,10 @@ public class Particle {
 
     public double r_c;
 
-    Set<Particle> neighbors;
+    public Set<Particle> neighbors;
 
-    public Particle(double x, double y, double r_c) {
+    public Particle(int id, double x, double y, double r_c) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.r_c = r_c;
