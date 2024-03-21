@@ -2,7 +2,10 @@ package main.java.ar.edu.itba.ss.models;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
+import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
 
 public class Particle {
 
@@ -17,6 +20,7 @@ public class Particle {
     public Set<Particle> neighbors;
 
     public Velocity currentVelocity;
+
 
     public Particle(int id, double x, double y, double r_c, Velocity velocity) {
         this.id = id;
@@ -48,6 +52,29 @@ public class Particle {
 
     public double calculateDistance(Particle other){
         return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2));
+    }
+    public void move(double dt, double n) {
+        x = x + this.currentVelocity.getXVelocityModule() * dt;
+        y = y + this.currentVelocity.getYVelocityModule() * dt;
+        currentVelocity = this.calculateNewVelocity(n);
+        neighbors = new HashSet<>();
+    }
+
+    public Velocity calculateNewVelocity(double n) {
+        final Set<Particle> particles = new HashSet<>(this.neighbors);
+        particles.add(this);
+
+        final double noise = new Random().nextDouble(-n/2, n/2);
+        double y = particles.stream()
+                .map(p -> p.currentVelocity.angle)
+                .map(Math::sin)
+                .collect(Collectors.averagingDouble(a -> a));
+        double x = particles.stream()
+                .map(p -> p.currentVelocity.angle)
+                .map(Math::cos)
+                .collect(Collectors.averagingDouble(a -> a));
+        double angle = Math.atan2(y, x) + noise;
+        return new Velocity(this.currentVelocity.module, angle);
     }
 
     @Override

@@ -7,19 +7,18 @@ public class Grid {
     public Cell[][] cells;
     public Set<Particle> particles;
     public  int m;
-    public int l;
-    public boolean isPeriodic;
+    public double l;
 
-    public Grid(Set<Particle> particles, int m, int l, boolean isPeriodic, double r_c) {
+    public double n;
+
+    public Grid(Set<Particle> particles, int m, double l, double r_c, double n) {
         this.particles = particles;
 
-        if( (double) l /m < r_c ){
+        if( l /m < r_c ){
             throw new RuntimeException("Invalid M value");
         }
-
         this.m = m;
         this.l = l;
-        this.isPeriodic = isPeriodic;
         this.createAndAssignCells(this.particles);
     }
 
@@ -46,7 +45,7 @@ public class Grid {
         });
     }
 
-    private void calculateNeighborsPeriodic() {
+    public void calculateNeighborsPeriodic() {
         this.particles.stream().parallel().forEach(p -> {
             int x = this.getXCellIndex(p);
             int y = this.getYCellIndex(p);
@@ -65,4 +64,10 @@ public class Grid {
             p.setNeighbours(candidates);
         });
     }
+    public Set<Particle> moveParticles(int dt){
+        particles.stream().parallel().forEach(p -> p.move(dt, n));
+        this.cells = new Cell[m][m];
+        return particles;
+    }
+
 }

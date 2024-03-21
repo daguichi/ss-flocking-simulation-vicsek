@@ -39,8 +39,10 @@ public class Main {
         Set<Particle> particles = reader.getParticles();
 
         int epocs = 10;
+        double n = 1;
         Instant start = Instant.now();
-        Main.simulate(epocs, reader, particles, numberOfParticles, sideLength, sqrtCellsAmount, radius);
+        OffLatice offLatice = new OffLatice(epocs, reader, particles, n);
+        offLatice.simulate(sideLength, sqrtCellsAmount, radius);
         Instant end = Instant.now();
         System.out.println(Duration.between(start, end));
 
@@ -58,18 +60,5 @@ public class Main {
 
 
     }
-    public static void simulate(int iterations,
-                                ParticleReader reader,
-                                Set<Particle> particles,
-                                int numberOfParticles,
-                                double sideLength,
-                                int sqrtCellsAmount,
-                                double radius){
-        for(int i=0; i< iterations; i++){
-            //set grid, conditions, etc
-            //use cim_contour
-            reader.printToOutput(i, particles, "output.txt");
-            //particles move
-        }
-    }
+
 }
