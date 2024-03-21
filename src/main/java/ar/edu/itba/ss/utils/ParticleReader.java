@@ -12,9 +12,10 @@ public class ParticleReader {
         FileWriter fileWriter = new FileWriter("dynamic.txt");
         PrintWriter printWriter = new PrintWriter(fileWriter);
         printWriter.println(0);
+        double velocity_module = 0.03;
         for(int i=0; i< numberOfParticles; i++){
             Random r = new Random();
-            printWriter.printf("%.7e %.7e\n", r.nextDouble(particle_radius, sideLength - particle_radius),  r.nextDouble(particle_radius, sideLength - particle_radius));
+            printWriter.printf("%.7e %.7e %.7e %.7e\n", r.nextDouble(particle_radius, sideLength - particle_radius),  r.nextDouble(particle_radius, sideLength - particle_radius), velocity_module, r.nextDouble(0, 2* Math.PI ));
         }
         printWriter.close();
     }
@@ -48,9 +49,12 @@ public class ParticleReader {
 
             printWriter.println(time);
             particlePositions.forEach(particle -> {
-                printWriter.println(particle.id + " " +particle.neighbors.stream()
-                        .map(neighbor -> neighbor.id)
-                        .collect(Collectors.toSet()));
+                List<String> line = new ArrayList<>();
+                line.add(String.valueOf(particle.x));
+                line.add(String.valueOf(particle.y));
+                line.add(String.valueOf(particle.currentVelocity.module));
+                line.add(String.valueOf(particle.currentVelocity.angle));
+                printWriter.println(line);
             });
             myWriter.close();
 

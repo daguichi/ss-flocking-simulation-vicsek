@@ -6,11 +6,11 @@ public class Velocity {
 
     public double angle;
 
-    public double getXSpeed() {
+    public double getXVelocityModule() {
         return this.module * Math.cos(this.angle);
     }
 
-    public double getYSpeed() {
+    public double getYVelocityModule() {
         return this.module * Math.sin(this.angle);
     }
 
