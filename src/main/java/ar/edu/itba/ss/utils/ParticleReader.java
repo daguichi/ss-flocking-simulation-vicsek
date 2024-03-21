@@ -1,5 +1,6 @@
 package main.java.ar.edu.itba.ss.utils;
 import main.java.ar.edu.itba.ss.models.Particle;
+import main.java.ar.edu.itba.ss.models.Velocity;
 
 import java.io.*;
 import java.util.*;
@@ -29,7 +30,7 @@ public class ParticleReader {
         int id = 1;
         int time_0 = myReader.nextInt();
         while(myReader.hasNextFloat()){
-            set.add(new Particle(id++, myReader.nextDouble(), myReader.nextDouble(), 0.25));
+            set.add(new Particle(id++, myReader.nextDouble(), myReader.nextDouble(), 0.25, new Velocity(myReader.nextDouble(), myReader.nextDouble())));
         }
         return set;
     }

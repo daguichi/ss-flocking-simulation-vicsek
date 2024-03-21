@@ -16,11 +16,14 @@ public class Particle {
 
     public Set<Particle> neighbors;
 
-    public Particle(int id, double x, double y, double r_c) {
+    public Velocity currentVelocity;
+
+    public Particle(int id, double x, double y, double r_c, Velocity velocity) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.r_c = r_c;
+        this.currentVelocity = velocity
     }
 
     public void setNeighbours(Set<Particle> candidates) {
