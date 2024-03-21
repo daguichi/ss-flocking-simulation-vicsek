@@ -23,7 +23,7 @@ public class Particle {
         this.x = x;
         this.y = y;
         this.r_c = r_c;
-        this.currentVelocity = velocity
+        this.currentVelocity = velocity;
     }
 
     public void setNeighbours(Set<Particle> candidates) {
