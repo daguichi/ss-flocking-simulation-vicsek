@@ -19,6 +19,8 @@ public class Grid {
         }
         this.m = m;
         this.l = l;
+        this.n = n;
+        this.cells = new Cell[m][m];
         this.createAndAssignCells(this.particles);
     }
 

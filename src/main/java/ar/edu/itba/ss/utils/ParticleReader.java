@@ -7,9 +7,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParticleReader {
+
+    public String dynamicPath;
+
+    public ParticleReader(String dynamicPath) {
+        this.dynamicPath = dynamicPath;
+    }
+
     public void generateRandomPositions(int numberOfParticles, double particle_radius, double sideLength) throws IOException {
         Set<Particle> positions = new HashSet<>();
-        FileWriter fileWriter = new FileWriter("dynamic.txt");
+        FileWriter fileWriter = new FileWriter(this.dynamicPath);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         printWriter.println(0);
         double velocity_module = 0.03;
@@ -23,7 +30,7 @@ public class ParticleReader {
         Set<Particle> set = new HashSet<>();
         Scanner myReader = null;
         try {
-            File input = new File("dynamic.txt");
+            File input = new File(dynamicPath);
             myReader = new Scanner(input);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -39,22 +46,24 @@ public class ParticleReader {
     public void printToOutput(long time, Set<Particle> particlePositions, String fileName){
         try {
             File myObj = new File(fileName);
+            FileWriter myWriter;
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
-            } else {
+                myWriter = new FileWriter(fileName);
+            }else {
                 System.out.println("File already exists.");
+                  myWriter = new FileWriter(fileName, true);
             }
-            FileWriter myWriter = new FileWriter(fileName);
             PrintWriter printWriter = new PrintWriter(myWriter);
-
-            printWriter.println(time);
+            printWriter.println("t"+time);
             particlePositions.forEach(particle -> {
                 List<String> line = new ArrayList<>();
                 line.add(String.valueOf(particle.x));
                 line.add(String.valueOf(particle.y));
                 line.add(String.valueOf(particle.currentVelocity.module));
                 line.add(String.valueOf(particle.currentVelocity.angle));
-                printWriter.println(line);
+                String formattedLine = String.join(" ", line);
+                printWriter.println(formattedLine);
             });
             myWriter.close();
 

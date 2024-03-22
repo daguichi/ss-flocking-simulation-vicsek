@@ -26,7 +26,6 @@ public class OffLatice {
     }
 
     public void simulate(double sideLength, int sqrtCellsAmount, double radius){
-
         for(int i=0; i< iterations; i++){
             Grid grid = new Grid(particles, sqrtCellsAmount, sideLength, radius, n);
             grid.calculateNeighborsPeriodic();
