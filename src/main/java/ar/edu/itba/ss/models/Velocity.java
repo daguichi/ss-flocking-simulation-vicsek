@@ -19,12 +19,4 @@ public class Velocity {
         this.angle = angle;
     }
 
-    @Override
-    public String toString() {
-        return "Velocity{" +
-                "speed=" + module +
-                ", angle=" + angle +
-                '}';
-    }
-
 }

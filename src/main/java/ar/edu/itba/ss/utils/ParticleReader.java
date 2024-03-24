@@ -4,7 +4,6 @@ import main.java.ar.edu.itba.ss.models.Velocity;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ParticleReader {
 
