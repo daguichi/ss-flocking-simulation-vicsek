@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
-import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 public class Particle {
@@ -30,20 +29,20 @@ public class Particle {
         this.currentVelocity = velocity;
     }
 
-    public void setNeighbours(Set<Particle> candidates) {
+    public void setNeighbors(Set<Particle> candidates) {
         this.neighbors = new HashSet<>();
-        candidates.stream().filter(this::isNeighbour).forEach(this::addNeighbour);
+        candidates.stream().filter(this::isNeighbor).forEach(this::addNeighbor);
     }
 
-    public boolean isNeighbour(Particle particle, double rc) {
+    public boolean isNeighbor(Particle particle, double rc) {
         return !this.equals(particle) &&  rc >= this.calculateDistance(particle);
     }
 
-    public boolean isNeighbour(Particle particle) {
-        return this.isNeighbour(particle, r_c );
+    public boolean isNeighbor(Particle particle) {
+        return this.isNeighbor(particle, r_c );
     }
 
-    public void addNeighbour(Particle particle) {
+    public void addNeighbor(Particle particle) {
         if (this.equals(particle)) {
             return;
         }

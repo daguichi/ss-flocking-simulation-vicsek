@@ -63,7 +63,7 @@ public class Grid {
                     candidates.addAll(cells[mI][mJ].particles);
                 }
             }
-            p.setNeighbours(candidates);
+            p.setNeighbors(candidates);
         });
     }
     public Set<Particle> moveParticles(int dt){
