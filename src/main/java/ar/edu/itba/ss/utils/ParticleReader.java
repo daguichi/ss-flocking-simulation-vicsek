@@ -42,36 +42,17 @@ public class ParticleReader {
         return set;
     }
 
-    public void printToOutput(long time, Set<Particle> particlePositions, String fileName){
-        try {
-            File myObj = new File(fileName);
-            FileWriter myWriter;
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-                myWriter = new FileWriter(fileName);
-            }else {
-                System.out.println("File already exists.");
-                  myWriter = new FileWriter(fileName, true);
-            }
-            PrintWriter printWriter = new PrintWriter(myWriter);
-            printWriter.println("t"+time);
-            particlePositions.forEach(particle -> {
-                List<String> line = new ArrayList<>();
-                line.add(String.valueOf(particle.x));
-                line.add(String.valueOf(particle.y));
-                line.add(String.valueOf(particle.currentVelocity.module));
-                line.add(String.valueOf(particle.currentVelocity.angle));
-                String formattedLine = String.join(" ", line);
-                printWriter.println(formattedLine);
-            });
-            myWriter.close();
-
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-        }
-
-
-
+    public void printToOutput(long time, Set<Particle> particlePositions, PrintWriter printWriter){
+      printWriter.println("t"+time);
+      particlePositions.forEach(particle -> {
+        List<String> line = new ArrayList<>();
+        line.add(String.valueOf(particle.x));
+        line.add(String.valueOf(particle.y));
+        line.add(String.valueOf(particle.currentVelocity.module));
+        line.add(String.valueOf(particle.currentVelocity.angle));
+        String formattedLine = String.join(" ", line);
+        printWriter.println(formattedLine);
+      });
     }
 
 
