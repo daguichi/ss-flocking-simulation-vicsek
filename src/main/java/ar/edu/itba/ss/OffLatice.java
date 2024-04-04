@@ -71,7 +71,7 @@ public void simulate(double sideLength, int sqrtCellsAmount, double radius){
           grid.calculateNeighborsPeriodic();
           particleReader.printToOutput(i, particles, printWriter);
           particleReader.printVaToOutput(i, particles, vaPrintWriter);
-          particles = grid.moveParticles(DT);
+          particles = grid.moveParticles(DT, sideLength);
         }
         
 

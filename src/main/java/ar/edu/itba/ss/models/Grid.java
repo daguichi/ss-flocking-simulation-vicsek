@@ -84,8 +84,8 @@ public class Grid {
             }
         }
     }
-    public Set<Particle> moveParticles(int dt){
-        particles.stream().parallel().forEach(p -> p.move(dt, n));
+    public Set<Particle> moveParticles(int dt, double sideLength){
+        particles.stream().parallel().forEach(p -> p.move(dt, n, sideLength));
         this.cells = new Cell[m][m];
         return particles;
     }

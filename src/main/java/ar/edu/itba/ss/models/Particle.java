@@ -54,9 +54,9 @@ public class Particle {
         this.neighbors.add(particle);
     }
 
-    public void move(double dt, double n) {
-        x = x + this.currentVelocity.getXVelocityModule() * dt;
-        y = y + this.currentVelocity.getYVelocityModule() * dt;
+    public void move(double dt, double n, double l) {
+        x = (l + x + this.currentVelocity.getXVelocityModule() * dt) % l;
+        y = (l + y + this.currentVelocity.getYVelocityModule() * dt) % l;
         currentVelocity = this.calculateNewVelocity(n);
         neighbors = new HashSet<>();
     }
