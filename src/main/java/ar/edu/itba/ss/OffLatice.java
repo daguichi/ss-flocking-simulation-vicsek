@@ -35,7 +35,7 @@ public void simulate(double sideLength, int sqrtCellsAmount, double radius){
         // System.out.println("n: " + n);
         // System.out.println("iterations: " + iterations);
         
-        String fileName = String.format("output_N%d_L%f_eta%d_epocs%d.txt", particles.size(), sideLength, (int) this.n, iterations);
+        String fileName = String.format("output_N%d_L%f_eta%f_epocs%d.txt", particles.size(), sideLength, this.n, iterations);
         File myObj = new File(fileName);        
         FileWriter myWriter;
         if (myObj.createNewFile()) {
@@ -48,14 +48,37 @@ public void simulate(double sideLength, int sqrtCellsAmount, double radius){
         PrintWriter printWriter = new PrintWriter(myWriter);
         printWriter.println(sideLength); // print sideLength as the first line
 
+  //  ahora quiero para cada iteración, calcular el v_a como la raiz cuadradad de la suma de los módulos de las velocidades de las partículas
+  // eso se hará en el metodo moveParticles de la clase Grid, pero primero necesito crear el archivo va_output_N%d_L%f_eta%d_epocs%d.txt
+
+        String vaFileName = String.format("va_output_N%d_L%f_eta%f_epocs%d.txt", particles.size(), sideLength, this.n, iterations);
+        File vaObj = new File(vaFileName);
+        FileWriter vaWriter;
+        if (vaObj.createNewFile()) {
+          System.out.println("File created: " + vaObj.getName());
+          vaWriter = new FileWriter(vaFileName);
+        } else {
+          System.out.println("File already exists.");
+          vaWriter = new FileWriter(vaFileName, true);
+        }
+        PrintWriter vaPrintWriter = new PrintWriter(vaWriter);
+
+        System.out.println(iterations);
         for(int i=0; i< iterations; i++){
+            System.out.println(i);
+
           Grid grid = new Grid(particles, sqrtCellsAmount, sideLength, radius, n);
           grid.calculateNeighborsPeriodic();
           particleReader.printToOutput(i, particles, printWriter);
+          particleReader.printVaToOutput(i, particles, vaPrintWriter);
           particles = grid.moveParticles(DT);
         }
+        
 
+        vaWriter.close();
         myWriter.close();
+        printWriter.close();
+        vaPrintWriter.close();
     } catch (IOException e) {
         System.out.println("An error occurred.");
     }
