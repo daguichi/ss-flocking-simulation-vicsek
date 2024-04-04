@@ -55,5 +55,17 @@ public class ParticleReader {
       });
     }
 
+    public void printVaToOutput(long time, Set<Particle> particlePositions, PrintWriter printWriter){
+      // printWriter.println("t"+time);
+        // System.out.println(time);
+      
 
+      double va = 1 / (particlePositions.size() * 0.03);
+      double sumVx = particlePositions.stream().mapToDouble(p -> p.currentVelocity.getXVelocityModule()).sum();
+      double sumVy = particlePositions.stream().mapToDouble(p -> p.currentVelocity.getYVelocityModule()).sum();
+      double modulus = Math.sqrt(sumVx * sumVx + sumVy * sumVy);
+      va *= modulus;
+      // por alguna razon me esta escribiendo hasta la linea 997, me ayudas a debuggear
+      printWriter.println(va);
+    }
 }
