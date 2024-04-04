@@ -27,19 +27,24 @@ public class Particle {
         this.y = y;
         this.r_c = r_c;
         this.currentVelocity = velocity;
-    }
-
-    public void setNeighbors(Set<Particle> candidates) {
         this.neighbors = new HashSet<>();
-        candidates.stream().filter(this::isNeighbor).forEach(this::addNeighbor);
     }
 
-    public boolean isNeighbor(Particle particle, double rc) {
-        return !this.equals(particle) &&  rc >= this.calculateDistance(particle);
+    public void setPeriodicNeighbors(Set<Particle> candidates, double rc, double sideLength){
+        candidates.stream().filter(particle -> isPeriodicNeighbor(particle, rc, sideLength)).forEach(this::addNeighbor);
+
     }
 
-    public boolean isNeighbor(Particle particle) {
-        return this.isNeighbor(particle, r_c );
+    public boolean isPeriodicNeighbor(Particle particlePosition, double rc, double sideLength){
+
+        final double auxDeltaX = Math.abs(this.x - particlePosition.x);
+        final double deltaX = Double.min(auxDeltaX, sideLength - auxDeltaX);
+
+        final double auxDeltaY = Math.abs(this.y - particlePosition.y);
+        final double deltaY = Double.min(auxDeltaY, sideLength- auxDeltaY);
+
+        return  !this.equals(particlePosition) &&  rc >= Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
     }
 
     public void addNeighbor(Particle particle) {
@@ -49,9 +54,6 @@ public class Particle {
         this.neighbors.add(particle);
     }
 
-    public double calculateDistance(Particle other){
-        return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2));
-    }
     public void move(double dt, double n) {
         x = x + this.currentVelocity.getXVelocityModule() * dt;
         y = y + this.currentVelocity.getYVelocityModule() * dt;

@@ -1,5 +1,6 @@
 package main.java.ar.edu.itba.ss.models;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ public class Grid {
 
     public double n;
 
+    public double r_c;
+
     public Grid(Set<Particle> particles, int m, double l, double r_c, double n) {
         this.particles = particles;
 
@@ -20,6 +23,7 @@ public class Grid {
         this.m = m;
         this.l = l;
         this.n = n;
+        this.r_c = r_c;
         this.cells = new Cell[m][m];
         this.createAndAssignCells(this.particles);
     }
@@ -48,23 +52,37 @@ public class Grid {
     }
 
     public void calculateNeighborsPeriodic() {
-        this.particles.stream().parallel().forEach(p -> {
-            int x = this.getXCellIndex(p);
-            int y = this.getYCellIndex(p);
+        int neighborCellReach = (int)Math.ceil(this.r_c / (l/m) );
 
-            Set<Particle> candidates = new HashSet<>();
-            for (int i = x - 1; i <= x + 1; i++) {
-                for (int j = y - 1; j <= y + 1; j++) {
-                    int mI = (i + m) % m;
-                    int mJ = (j + m) % m;
-                    if (cells[mI][mJ] == null) {
-                        continue;
+        for (int cellI = 0; cellI < m; cellI++) {
+            for (int cellJ = 0; cellJ < m; cellJ++) {
+                if (cells[cellI][cellJ] == null) {
+                    continue;
+                }
+
+                Set<Particle> relevantParticles = new HashSet<>(cells[cellI][cellJ].particles);
+
+                for (int i = -neighborCellReach; i <= neighborCellReach; i++) {
+                    for (int j = -neighborCellReach; j <= neighborCellReach; j++) {
+                        int neighborI = (cellI + i + m) % m;
+                        int neighborJ = (cellJ + j + m) % m;
+
+                        if (cells[neighborI][neighborJ] != null) {
+                            relevantParticles.addAll(cells[neighborI][neighborJ].particles);
+                        }
                     }
-                    candidates.addAll(cells[mI][mJ].particles);
+                }
+
+                for (Particle particle : cells[cellI][cellJ].particles) {
+                    for (Particle candidateNeighbor : relevantParticles) {
+                        if (particle.equals(candidateNeighbor)) {
+                            continue;
+                        }
+                        particle.setPeriodicNeighbors(Collections.singleton(candidateNeighbor), this.r_c, this.l);
+                    }
                 }
             }
-            p.setNeighbors(candidates);
-        });
+        }
     }
     public Set<Particle> moveParticles(int dt){
         particles.stream().parallel().forEach(p -> p.move(dt, n));
