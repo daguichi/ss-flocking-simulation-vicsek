@@ -11,9 +11,9 @@ import numpy as np
 # el ruido va a estar en el eje x, y va en el eje y
 # el grafico se va a guardar en ./va_noise_results.png
 
-# los incrementos son de 0.33 entre 0 y 8 
-#(0.33, 0.66, 1, 1.33, 1.66, 2, 2.33, 2.66, 3, 3.33, 3.66, 4, 4.33, 4.66, 5, 5.33, 5.66, 6, 6.33, 6.66, 7, 7.33, 7.66, 8)
-# leer los archivos va_output_N4000_L28.284200_eta0.330000_epocs1000.txt ...
+# los incrementos son de 0.5 pero el primero es 0.1, 0.5 y recien ahi incrementa hasta 8
+# 0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8
+
 
 # metodo para leer archivo y dar el mean, el std 
 def read_vas_file(name):
@@ -25,20 +25,30 @@ def read_vas_file(name):
   return np.mean(list_y), np.std(list_y)
   
 # directorio de archivos
-etas = [0.33, 0.66, 1, 1.33, 1.66, 2, 2.33, 2.66, 3, 3.33, 3.66, 4, 4.33, 4.66, 5, 5.33, 5.66, 6, 6.33, 6.66, 7, 7.33, 7.66, 8]
+etas = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8]
 etas = [format(eta, '.6f') for eta in etas]
-# mapear los etas a los nombres de archivos
-etas_files = ["./SS-TP2/va_output_N4000_L28.284200_eta" + str(eta) + "_epocs1000.txt" for eta in etas]
 
-#imprimir etas_files
-print(etas_files)
+# mapear los etas a los nombres de archivos para la primera configuración
+etas_files1 = ["./SS-TP2/N300_L5.000000_etaX_epocs300/va_output_N300_L5.000000_eta" + str(eta) + "_epocs300.txt" for eta in etas]
+
+# mapear los etas a los nombres de archivos para la segunda configuración
+etas_files2 = ["./SS-TP2/N1000_L9.128710_etaX_epocs300/va_output_N1000_L9.128710_eta" + str(eta) + "_epocs300.txt" for eta in etas]
 
 # graficar
 plt.xlabel('Ruido')
 plt.ylabel('Polarización')
-label = False
+
+# graficar la primera configuración
 for i in range(len(etas)):
-  mean, std = read_vas_file(etas_files[i])
-  plt.errorbar(etas[i], mean, yerr=std, fmt="o")
+  mean, std = read_vas_file(etas_files1[i])
+  plt.errorbar(float(etas[i]), mean, yerr=std, fmt="o", color='blue', label='N=300, L=5.000000' if i == 0 else "")
+
+# graficar la segunda configuración
+for i in range(len(etas)):
+  mean, std = read_vas_file(etas_files2[i])
+  plt.errorbar(float(etas[i]), mean, yerr=std, fmt="o", color='red', label='N=1000, L=9.128710' if i == 0 else "")
+
+# mostrar la leyenda
+plt.legend()
 
 plt.savefig("./va_noise_results.png")
