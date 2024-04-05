@@ -85,5 +85,5 @@ plt.yticks([])  # Removes tick labels on the y-axis
 ani = animation.FuncAnimation(fig, update_plot, frames=len(particles_per_t), interval=16.67 ,repeat=True)
 # save the animation as a gif
 
-ani.save('output.gif', writer='pillow', fps=60, dpi=300)
+ani.save("./results/animations/" + input.replace(".txt", ".gif"), writer='pillow', fps=60, dpi=300)
 plt.show()
