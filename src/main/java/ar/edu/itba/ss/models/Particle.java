@@ -65,7 +65,7 @@ public class Particle {
         final Set<Particle> particles = new HashSet<>(this.neighbors);
         particles.add(this);
 
-        final double noise = new Random().nextDouble(-n/2, n/2);
+        final double noise = (n != 0) ? new Random().nextDouble(-n/2, n/2) : 0;
         double y = particles.stream()
                 .map(p -> p.currentVelocity.angle)
                 .map(Math::sin)
